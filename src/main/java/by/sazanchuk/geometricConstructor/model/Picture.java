@@ -1,5 +1,6 @@
 package by.sazanchuk.geometricConstructor.model;
 
+import by.sazanchuk.geometricConstructor.model.dto.PictureDTO;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -31,4 +32,16 @@ public class Picture {
 
     @Transient
     private List<Group> groups;
+
+    public PictureDTO toDTO() {
+        PictureDTO dto = new PictureDTO();
+
+        dto.setCreationDate(this.creationDate);
+        dto.setLastEditDate(this.lastEditDate);
+//        dto.setGroups(this.groups);
+        dto.setTitle(this.title);
+        dto.setId(this.id);
+
+        return dto;
+    }
 }

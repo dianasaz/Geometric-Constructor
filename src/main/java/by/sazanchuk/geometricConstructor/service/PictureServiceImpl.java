@@ -1,13 +1,15 @@
 package by.sazanchuk.geometricConstructor.service;
 
-import by.sazanchuk.geometricConstructor.model.Group;
 import by.sazanchuk.geometricConstructor.model.Picture;
+import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
+import by.sazanchuk.geometricConstructor.model.dto.PictureDTO;
 import by.sazanchuk.geometricConstructor.repository.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -20,7 +22,7 @@ public class PictureServiceImpl {
     @Autowired
     private GroupServiceImpl groupService;
 
-    public Picture save (Picture picture) {
+    public Picture save(Picture picture) {
         LocalDateTime now = LocalDateTime.now();
         picture.setLastEditDate(now);
 
@@ -33,7 +35,7 @@ public class PictureServiceImpl {
         return pictureRepository.save(picture);
     }
 
-    public boolean delete (Long id) {
+    public boolean delete(Long id) {
         if (pictureRepository.existsById(id)) {
             pictureRepository.deleteById(id);
 
@@ -43,20 +45,39 @@ public class PictureServiceImpl {
         return false;
     }
 
-    public List<Picture> findAllSortedByLastEditDateDesc () {
-        return pictureRepository.findAllByOrderByLastEditDateDesc();
+    public List<PictureDTO> findAllSortedByLastEditDateDesc() {
+
+        List<Picture> pictures = pictureRepository.findAllByOrderByLastEditDateDesc();
+
+        List<PictureDTO> dto = convertToDTO(pictures);
+        dto = fillDTOWithGroups(dto);
+
+        return dto;
     }
 
-    public List<Picture> findAll () {
+    public List<PictureDTO> findAll() {
         List<Picture> pictures = pictureRepository.findAll();
 
-        pictures
-                .forEach(picture -> {
-                    List<Group> groups = groupService.findAllByPictureId(picture.getId());
-                    picture.setGroups(groups);
+        List<PictureDTO> dto = convertToDTO(pictures);
+        dto = fillDTOWithGroups(dto);
+
+        return dto;
+    }
+
+    private List<PictureDTO> convertToDTO(List<Picture> pictures) {
+        return pictures.stream()
+                .map(Picture::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    private List<PictureDTO> fillDTOWithGroups(List<PictureDTO> dto) {
+        dto
+                .forEach(pictureDTO -> {
+                    List<GroupDTO> groups = groupService.findAllByPictureId(pictureDTO.getId());
+                    pictureDTO.setGroups(groups);
                 });
 
-        return pictures;
+        return dto;
     }
 
 }

@@ -1,4 +1,4 @@
-package by.sazanchuk.geometricConstructor.model.figure;
+package by.sazanchuk.geometricConstructor.model;
 
 public enum CircleBorderType {
     DOTTED,

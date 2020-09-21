@@ -2,6 +2,8 @@ package by.sazanchuk.geometricConstructor.controller;
 
 import by.sazanchuk.geometricConstructor.model.Group;
 import by.sazanchuk.geometricConstructor.model.Picture;
+import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
+import by.sazanchuk.geometricConstructor.model.dto.PictureDTO;
 import by.sazanchuk.geometricConstructor.service.GroupServiceImpl;
 import by.sazanchuk.geometricConstructor.service.PictureServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +24,18 @@ public class PictureController {
     private GroupServiceImpl groupService;
 
     @GetMapping(value = "/sorted")
-    public List<Picture> findAllPicturesSorted() {
+    public List<PictureDTO> findAllPicturesSorted() {
         return pictureService.findAllSortedByLastEditDateDesc();
     }
 
 
-    @GetMapping(value = "/all")
-    public Group findAllPictures() {
-        Group group = groupService.findById(new Long(1));
-        return group;
+    @GetMapping()
+    public List<PictureDTO> findAllPictures() {
+        return pictureService.findAll();
     }
 
-    @GetMapping(value = "/{id}/groups")
-    public List<Group> findAllGroupsByPicture(@PathVariable Long id) {
-        return groupService.findAllByPictureId(id);
-    }
+//    @GetMapping(value = "/{id}/groups")
+//    public List<GroupDTO> findAllGroupsByPicture(@PathVariable Long id) {
+//        return groupService.findAllByPictureId(id);
+//    }
 }
