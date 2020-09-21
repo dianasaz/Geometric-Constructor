@@ -4,9 +4,11 @@ import by.sazanchuk.geometricConstructor.model.Picture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface PictureRepository extends JpaRepository<Picture, Long> {
-    List<Picture> findAllOrOrderByLastEditDateDesc();
+
+    List<Picture> findAllByOrderByLastEditDateDesc();
 }
