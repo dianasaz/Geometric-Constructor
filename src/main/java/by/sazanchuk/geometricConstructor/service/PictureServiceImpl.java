@@ -1,6 +1,5 @@
 package by.sazanchuk.geometricConstructor.service;
 
-import by.sazanchuk.geometricConstructor.model.Group;
 import by.sazanchuk.geometricConstructor.model.Picture;
 import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
 import by.sazanchuk.geometricConstructor.model.dto.PictureDTO;
@@ -25,14 +24,13 @@ public class PictureServiceImpl {
     private GroupServiceImpl groupService;
 
     @Transactional
-    public PictureDTO save (PictureDTO dto) {
+    public PictureDTO save(PictureDTO dto) {
         Picture picture = null;
         LocalDateTime now = LocalDateTime.now();
 
         if (!isNull(dto.getId()) && pictureRepository.existsById(dto.getId())) {
             picture = pictureRepository.findById(dto.getId()).get();
-        }
-        else {
+        } else {
             picture = new Picture();
             picture.setCreationDate(now);
         }
@@ -46,7 +44,10 @@ public class PictureServiceImpl {
             groupService.saveAll(dto.getGroups(), picture);
         }
 
-        return picture.toDTO();
+        PictureDTO pictureDTO = picture.toDTO();
+        pictureDTO = fillDTOWithGroups(pictureDTO);
+
+        return pictureDTO;
     }
 
     @Transactional
@@ -59,7 +60,7 @@ public class PictureServiceImpl {
             return true;
         }
 
-         return false;
+        return false;
     }
 
     @Transactional
@@ -68,7 +69,7 @@ public class PictureServiceImpl {
         List<Picture> pictures = pictureRepository.findAllByOrderByLastEditDateDesc();
 
         List<PictureDTO> dto = convertToDTO(pictures);
-        dto = fillDTOWithGroups(dto);
+        fillDTOWithGroups(dto);
 
         return dto;
     }
@@ -99,4 +100,9 @@ public class PictureServiceImpl {
         return dto;
     }
 
+    private PictureDTO fillDTOWithGroups(PictureDTO dto) {
+        List<GroupDTO> groups = groupService.findAllByPictureId(dto.getId());
+        dto.setGroups(groups);
+        return dto;
+    }
 }

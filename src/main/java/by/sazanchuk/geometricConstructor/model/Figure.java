@@ -1,7 +1,9 @@
 package by.sazanchuk.geometricConstructor.model;
 
 import by.sazanchuk.geometricConstructor.model.dto.FigureDTO;
+import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
 @Table(name = "figure")
@@ -29,7 +32,7 @@ public class Figure extends Component{
     @Column(name = "symbol")
     @Pattern(regexp = "#[0-9a-fA-F]{6}",
             message = "Color must be in HEX format")
-    private char symbol;
+    private Character symbol;
 
     @Column(name = "color")
     @Pattern(regexp = "[0-9a-zA-Zа-яФ-Я]{1}",

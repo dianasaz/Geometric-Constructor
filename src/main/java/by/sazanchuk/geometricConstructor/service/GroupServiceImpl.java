@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.isNull;
-
 @Log
 @Service
 public class GroupServiceImpl {
@@ -28,7 +26,7 @@ public class GroupServiceImpl {
     public void save (GroupDTO dto, Picture picture) throws NoEntityException {
         Group group = null;
 
-        if (!isNull(dto.getId()) && groupRepository.existsById(dto.getId())) {
+        if (dto.getId() != null && groupRepository.existsById(dto.getId())) {
             group = groupRepository.findById(dto.getId()).get();
         }
         else {
@@ -37,7 +35,7 @@ public class GroupServiceImpl {
         }
 
         group.setOrderNumber(dto.getOrderNumber());
-        if (!isNull(dto.getRootGroup())) {
+        if (dto.getRootGroup() != null) {
             Group rootGroup = groupRepository.findById(dto.getRootGroup().getId()).orElseThrow(() -> new NoEntityException("No group found"));
             group.setRootGroup(rootGroup);
         }
@@ -49,22 +47,13 @@ public class GroupServiceImpl {
         }
 
         if (!dto.getGroups().isEmpty()) {
-            dto.getGroups()
-                    .forEach(
-                            groupDTO -> {
-                                try {
-                                    save(groupDTO, picture);
-                                } catch (NoEntityException e) {
-                                    log.info("No figure found with such id");
-                                }
-                            }
-                    );
+            saveInnerGroups(dto.getGroups(), group, picture);
         }
     }
 
     @Transactional
-    public void saveAll (List<GroupDTO> groupDTOS, Picture picture) {
-        groupDTOS
+    public void saveAll (List<GroupDTO> rootGroups, Picture picture) {
+        rootGroups
                 .forEach(
                         groupDTO -> {
                             try {
@@ -103,7 +92,20 @@ public class GroupServiceImpl {
                 fillAllGroups(innerGroups);
             }
         }
+    }
 
+    private void saveInnerGroups (List<GroupDTO> groupDTOS, Group group, Picture picture) {
+        groupDTOS
+                .forEach(
+                        groupDTO -> {
+                            try {
+                                groupDTO.setRootGroup(group.toDTO());
+                                save(groupDTO, picture);
+                            } catch (NoEntityException e) {
+                                log.info("No figure found with such id");
+                            }
+                        }
+                );
     }
 
     private List<GroupDTO> toDTO(List<Group> groups) {
@@ -111,6 +113,5 @@ public class GroupServiceImpl {
                 .map(Group::toDTO)
                 .collect(Collectors.toList());
     }
-
 
 }

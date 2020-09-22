@@ -26,7 +26,6 @@ public class PictureController {
         return pictureService.findAllSortedByLastEditDateDesc();
     }
 
-
     @GetMapping()
     public List<PictureDTO> findAllPictures() {
         return pictureService.findAll();
