@@ -38,7 +38,6 @@ public class Picture {
 
         dto.setCreationDate(this.creationDate);
         dto.setLastEditDate(this.lastEditDate);
-//        dto.setGroups(this.groups);
         dto.setTitle(this.title);
         dto.setId(this.id);
 

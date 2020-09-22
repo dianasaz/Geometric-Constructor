@@ -1,12 +1,10 @@
 package by.sazanchuk.geometricConstructor.model.dto;
 
-import by.sazanchuk.geometricConstructor.model.Component;
-import by.sazanchuk.geometricConstructor.model.Figure;
-import by.sazanchuk.geometricConstructor.model.Group;
-import by.sazanchuk.geometricConstructor.model.Picture;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +19,9 @@ public class GroupDTO implements Serializable {
     private List<GroupDTO> groups;
 
     private List<FigureDTO> figures;
+
+    @Transient
+    private GroupDTO rootGroup;
 
     public GroupDTO(Long id, int orderNumber) {
         this.id = id;

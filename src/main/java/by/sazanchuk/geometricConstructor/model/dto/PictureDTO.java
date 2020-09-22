@@ -1,10 +1,9 @@
 package by.sazanchuk.geometricConstructor.model.dto;
 
-import by.sazanchuk.geometricConstructor.model.Group;
-import by.sazanchuk.geometricConstructor.model.Picture;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,16 +28,5 @@ public class PictureDTO implements Serializable {
         this.creationDate = creationDate;
         this.lastEditDate = lastEditDate;
     }
-//
-//    public Picture toEntity() {
-//        Picture picture = new Picture();
-//
-//        picture.setGroups(this.groups);
-//        picture.setCreationDate(this.creationDate);
-//        picture.setLastEditDate(this.lastEditDate);
-//        picture.setId(this.id);
-//        picture.setTitle(this.title);
-//
-//        return picture;
-//    }
+
 }

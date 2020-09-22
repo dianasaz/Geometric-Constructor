@@ -1,21 +1,33 @@
 package by.sazanchuk.geometricConstructor.model;
 
 import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "group_table")
 @NoArgsConstructor
 public class Group extends Component {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @NonNull
+    @Column(name = "illustration_method")
+    @Enumerated(EnumType.STRING)
+    private IllustrationMethod illustrationMethod;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "rootGroup")
     private Group rootGroup;
 

@@ -1,11 +1,13 @@
 package by.sazanchuk.geometricConstructor.service;
 
+import by.sazanchuk.geometricConstructor.model.Group;
 import by.sazanchuk.geometricConstructor.model.Picture;
 import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
 import by.sazanchuk.geometricConstructor.model.dto.PictureDTO;
 import by.sazanchuk.geometricConstructor.repository.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,29 +24,45 @@ public class PictureServiceImpl {
     @Autowired
     private GroupServiceImpl groupService;
 
-    public Picture save(Picture picture) {
+    @Transactional
+    public PictureDTO save (PictureDTO dto) {
+        Picture picture = null;
         LocalDateTime now = LocalDateTime.now();
-        picture.setLastEditDate(now);
 
-        Long id = picture.getId();
-
-        if (isNull(id) || !pictureRepository.existsById(id)) {
+        if (!isNull(dto.getId()) && pictureRepository.existsById(dto.getId())) {
+            picture = pictureRepository.findById(dto.getId()).get();
+        }
+        else {
+            picture = new Picture();
             picture.setCreationDate(now);
         }
 
-        return pictureRepository.save(picture);
+        picture.setTitle(dto.getTitle());
+        picture.setLastEditDate(now);
+
+        picture = pictureRepository.save(picture);
+
+        if (!isNull(dto.getGroups()) && !dto.getGroups().isEmpty()) {
+            groupService.saveAll(dto.getGroups(), picture);
+        }
+
+        return picture.toDTO();
     }
 
-    public boolean delete(Long id) {
-        if (pictureRepository.existsById(id)) {
-            pictureRepository.deleteById(id);
+    @Transactional
+    public boolean delete(Long pictureId) throws NoEntityException {
+        if (!isNull(pictureId) && pictureRepository.existsById(pictureId)) {
+            Picture picture = pictureRepository.findById(pictureId).orElseThrow(() -> new NoEntityException("No such picture"));
+            groupService.removeAllByPicture(picture);
+            pictureRepository.delete(picture);
 
             return true;
         }
 
-        return false;
+         return false;
     }
 
+    @Transactional
     public List<PictureDTO> findAllSortedByLastEditDateDesc() {
 
         List<Picture> pictures = pictureRepository.findAllByOrderByLastEditDateDesc();
@@ -55,6 +73,7 @@ public class PictureServiceImpl {
         return dto;
     }
 
+    @Transactional
     public List<PictureDTO> findAll() {
         List<Picture> pictures = pictureRepository.findAll();
 
