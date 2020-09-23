@@ -4,11 +4,13 @@ import by.sazanchuk.geometricConstructor.model.Group;
 import by.sazanchuk.geometricConstructor.model.Picture;
 import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
 import by.sazanchuk.geometricConstructor.repository.GroupRepository;
+import by.sazanchuk.geometricConstructor.service.exception.NoEntityException;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,15 +25,14 @@ public class GroupServiceImpl {
     private FigureServiceImpl figureService;
 
     @Transactional
-    public void save (GroupDTO dto, Picture picture) throws NoEntityException {
+    public void save (@Valid GroupDTO dto, Picture picture) throws NoEntityException {
         Group group = null;
 
         if (dto.getId() != null && groupRepository.existsById(dto.getId())) {
             group = groupRepository.findById(dto.getId()).get();
         }
         else {
-            group = new Group();
-            group.setPicture(picture);
+            group = new Group(picture, dto.getIllustrationMethod());
         }
 
         group.setOrderNumber(dto.getOrderNumber());

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -13,7 +14,7 @@ public class FigureDTO implements Serializable {
 
     private Long id;
 
-    @NonNull
+    @NotNull
     private FigureType figureType;
 
     private CircleBorderType borderType;
@@ -40,7 +41,7 @@ public class FigureDTO implements Serializable {
                 ", figureType=" + figureType +
                 ", borderType=" + borderType +
                 ", symbol=" + symbol +
-                ", color='" + color + '\'' +
+                ", color='" + color +
                 '}';
     }
 }

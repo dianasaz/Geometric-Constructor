@@ -4,6 +4,7 @@ import by.sazanchuk.geometricConstructor.model.Picture;
 import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
 import by.sazanchuk.geometricConstructor.model.dto.PictureDTO;
 import by.sazanchuk.geometricConstructor.repository.PictureRepository;
+import by.sazanchuk.geometricConstructor.service.exception.NoEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class PictureServiceImpl {
 
     @Transactional
     public PictureDTO save(PictureDTO dto) {
-        Picture picture = null;
+        Picture picture;
         LocalDateTime now = LocalDateTime.now();
 
         if (!isNull(dto.getId()) && pictureRepository.existsById(dto.getId())) {
@@ -45,7 +46,7 @@ public class PictureServiceImpl {
         }
 
         PictureDTO pictureDTO = picture.toDTO();
-        pictureDTO = fillDTOWithGroups(pictureDTO);
+        fillDTOWithGroups(pictureDTO);
 
         return pictureDTO;
     }
@@ -65,10 +66,9 @@ public class PictureServiceImpl {
 
     @Transactional
     public List<PictureDTO> findAllSortedByLastEditDateDesc() {
-
         List<Picture> pictures = pictureRepository.findAllByOrderByLastEditDateDesc();
 
-        List<PictureDTO> dto = convertToDTO(pictures);
+        List<PictureDTO> dto = toDTO(pictures);
         fillDTOWithGroups(dto);
 
         return dto;
@@ -78,13 +78,13 @@ public class PictureServiceImpl {
     public List<PictureDTO> findAll() {
         List<Picture> pictures = pictureRepository.findAll();
 
-        List<PictureDTO> dto = convertToDTO(pictures);
+        List<PictureDTO> dto = toDTO(pictures);
         dto = fillDTOWithGroups(dto);
 
         return dto;
     }
 
-    private List<PictureDTO> convertToDTO(List<Picture> pictures) {
+    private List<PictureDTO> toDTO(List<Picture> pictures) {
         return pictures.stream()
                 .map(Picture::toDTO)
                 .collect(Collectors.toList());

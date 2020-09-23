@@ -2,8 +2,8 @@ package by.sazanchuk.geometricConstructor.model.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +14,7 @@ public class PictureDTO implements Serializable {
 
     private Long id;
 
-    @NonNull
+    @NotNull
     private String title;
 
     private LocalDateTime creationDate;

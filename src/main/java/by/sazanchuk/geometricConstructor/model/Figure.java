@@ -1,9 +1,9 @@
 package by.sazanchuk.geometricConstructor.model;
 
 import by.sazanchuk.geometricConstructor.model.dto.FigureDTO;
-import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,12 +13,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Pattern;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
 @Table(name = "figure")
+@NoArgsConstructor
 public class Figure extends Component{
 
     @Column(name = "figure_type")
@@ -30,18 +30,20 @@ public class Figure extends Component{
     private CircleBorderType borderType;
 
     @Column(name = "symbol")
-    @Pattern(regexp = "#[0-9a-fA-F]{6}",
-            message = "Color must be in HEX format")
     private Character symbol;
 
     @Column(name = "color")
-    @Pattern(regexp = "[0-9a-zA-Zа-яФ-Я]{1}",
-            message = "Should be one symbol")
     private String color;
 
     @JoinColumn(name="group_id")
     @ManyToOne(cascade = CascadeType.ALL)
     private Group group;
+
+    public Figure(Picture picture, FigureType figureType, Group group) {
+        this.picture = picture;
+        this.figureType = figureType;
+        this.group = group;
+    }
 
     public FigureDTO toDTO() {
         return new FigureDTO(this.id, this.figureType, this.borderType, this.symbol, this.color);

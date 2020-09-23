@@ -4,7 +4,6 @@ import by.sazanchuk.geometricConstructor.model.dto.GroupDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,7 +22,6 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Group extends Component {
 
-    @NonNull
     @Column(name = "illustration_method")
     @Enumerated(EnumType.STRING)
     private IllustrationMethod illustrationMethod;
@@ -31,6 +29,11 @@ public class Group extends Component {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "rootGroup")
     private Group rootGroup;
+
+    public Group(Picture picture, IllustrationMethod illustrationMethod) {
+        this.picture = picture;
+        this.illustrationMethod = illustrationMethod;
+    }
 
     public GroupDTO toDTO() {
         return new GroupDTO(this.id, this.orderNumber, this.illustrationMethod);

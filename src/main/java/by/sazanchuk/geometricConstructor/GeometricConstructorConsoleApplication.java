@@ -37,7 +37,6 @@ public class GeometricConstructorConsoleApplication implements CommandLineRunner
         figureDTOS.add(triangle);
 
         GroupDTO rootGroup = new GroupDTO(null, 1, IllustrationMethod.COLUMN);
-        rootGroup.setIllustrationMethod(IllustrationMethod.COLUMN);
         GroupDTO group = new GroupDTO(null, 1, IllustrationMethod.LINE);
         group.setRootGroup(rootGroup);
 

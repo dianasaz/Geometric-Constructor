@@ -4,8 +4,8 @@ import by.sazanchuk.geometricConstructor.model.IllustrationMethod;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +15,14 @@ import java.util.List;
 public class GroupDTO implements Serializable {
     private Long id;
 
-    @NonNull
+    @NotNull
     private int orderNumber;
 
     private List<GroupDTO> groups;
 
     private List<FigureDTO> figures;
 
-    @NonNull
+    @NotNull
     private IllustrationMethod illustrationMethod;
 
     @JsonIgnore
@@ -34,10 +34,6 @@ public class GroupDTO implements Serializable {
         this.figures = new ArrayList<>();
         this.groups = new ArrayList<>();
         this.illustrationMethod = illustrationMethod;
-    }
-
-    public GroupDTO(Long id) {
-        this.id = id;
     }
 
     @Override
