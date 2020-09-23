@@ -8,6 +8,6 @@
     1) GET    http://localhost:8080/pictures/       - to see all pictures;
     2) POST   http://localhost:8080/pictures/       - to save new picture with groups and figures (add body, example here);
     3) PUT    http://localhost:8080/pictures/       - to update existing picture (add body);
-    4) DELETE http://localhost:8080/pictures/       - to delete existing picture with all groups and figures inside;
+    4) DELETE http://localhost:8080/pictures/{id}   - to delete existing picture with all groups and figures inside;
     5) GET    http://localhost:8080/pictures/sorted - to see all pictures sorted by last edit date.
     
