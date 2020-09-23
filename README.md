@@ -11,3 +11,22 @@
     4) DELETE http://localhost:8080/pictures/{id}   - to delete existing picture with all groups and figures inside;
     5) GET    http://localhost:8080/pictures/sorted - to see all pictures sorted by last edit date.
     
+Example :
+{
+        "title": "Picture 1",
+        "groups": [
+            {
+                "orderNumber": 1,
+                "groups": [],
+                "figures": [
+                    {
+                        "figureType": "SQUARE",
+                        "borderType": null,
+                        "symbol": "H",
+                        "color": null
+                    }
+                ],
+                "illustrationMethod": "LINE"
+            }
+        ]
+    }
